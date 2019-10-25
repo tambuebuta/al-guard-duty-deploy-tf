@@ -1,3 +1,4 @@
 .terraform*
 payload.zip
-
+vars.tfvars.commit
+vars.tfvars.test

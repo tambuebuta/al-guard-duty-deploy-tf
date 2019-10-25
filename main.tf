@@ -132,8 +132,8 @@ resource "aws_lambda_function" "collect_lambda_function" {
 
   environment {
     variables = {
-      aims_access_key_id            = "0df28182b6b33d42"
-      aims_secret_key               = "1962f7054c42c8eec0a752002fc19d9409dad61669e780d6dd2b73fd048363ea"
+      aims_access_key_id            = "${var.aims_access_key_id}"
+      aims_secret_key               = "${var.aims_secret_key}"
       aws_lambda_s3_bucket          = "alertlogic-collectors-us-east-1"
       aws_lambda_zipfile_name       = "packages/lambda/al-cwe-collector.zip"
       aws_lambda_update_config_name = "configs/lambda/al-cwe-collector.json"
