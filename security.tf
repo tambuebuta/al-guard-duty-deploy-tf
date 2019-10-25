@@ -45,7 +45,7 @@ resource "aws_iam_policy" "encrypt_lambda_policy" {
       "AWS": "arn:aws:iam:AWS::989608343549:root"
     },
     "Action": "logs:CreateLogGroup",
-    "Resources": "arn:aws:logs:us-east-1:989608343549::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:*"
+    "Resources": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:*"
    },
   {
     "Effect": "Allow",
@@ -54,7 +54,7 @@ resource "aws_iam_policy" "encrypt_lambda_policy" {
       "logs:PutLogEvents"
 
     ],
-    "Resources": "arn:aws:logs:us-east-1:989608343549::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:log-stream:log-stream:*"
+    "Resources": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:log-stream:log-stream:*"
    }
  ]
 }
@@ -73,10 +73,10 @@ resource "aws_iam_policy" "collect_lambda_policy" {
   {
     "Effect": "Allow",
     "Principal": {
-      "AWS": "arn:aws:iam:AWS::989608343549:root"
+      "AWS": "arn:aws:iam:AWS::${var.aws_account_id}:root"
     },
     "Action": "logs:CreateLogGroup",
-    "Resources": "arn:aws:logs:us-east-1:989608343549::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:*"
+    "Resources": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:*"
    },
   {
     "Effect": "Allow",
@@ -85,7 +85,7 @@ resource "aws_iam_policy" "collect_lambda_policy" {
       "logs:PutLogEvents"
 
     ],
-    "Resources": "arn:aws:logs:us-east-1:989608343549::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:log-stream:log-stream:*"
+    "Resources": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:log-stream:log-stream:*"
    },
   {
     "Effect": "Allow",
