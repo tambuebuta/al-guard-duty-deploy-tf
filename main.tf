@@ -108,6 +108,7 @@ EOF
 //Create Lambda KMS Key
 resource "aws_kms_key" "al_lambda_kms_key" {
   description = "kms key used to encrypt credentials for lambda"
+  policy      = "${file("kms-policy.json")}"
   depends_on  = ["aws_iam_role.collect_lambda_role", "aws_iam_role.encrypt_lambda_role"]
 
   tags = {
