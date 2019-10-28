@@ -6,6 +6,10 @@ provider "aws" {
   version                 = ">= 1.6"
 }
 
+provider "archive" {
+  version = "~> 1.3"
+}
+
 data "aws_caller_identity" "current" {}
 
 //Create Alert Logic Kinesis Stream
@@ -254,5 +258,5 @@ resource "aws_cloudwatch_event_target" "checkin_scheduled_target" {
   rule      = "${aws_cloudwatch_event_rule.checkin_scheduled_rule.name}"
   target_id = "1"
   arn       = "${aws_lambda_function.collect_lambda_function.arn}"
-  input     = "{\"RequestType\": \"ScheduledEvent\",\"Type\": \"Checkin\", \"AwsAccountId\": \"989608343549\", \"Region\": \"us-east-1\", \"KinesisArn\": \"${aws_kinesis_stream.al_cwe_collector.arn}\", \"CloudWatchEventsRule\": \"${aws_cloudwatch_event_rule.guard_duty_cloudwatch_event_rule.name}\", \"CweRulePattern\": \"{\\\"detail-type\\\":[\\\"GuardDuty Finding\\\"],\\\"source\\\":[\\\"aws.guardduty\\\"]}\"}"
+  input     = "{\"RequestType\": \"ScheduledEvent\",\"Type\": \"Checkin\", \"AwsAccountId\": \"${var.aws_account_id}\", \"Region\": \"us-east-1\", \"KinesisArn\": \"${aws_kinesis_stream.al_cwe_collector.arn}\", \"CloudWatchEventsRule\": \"${aws_cloudwatch_event_rule.guard_duty_cloudwatch_event_rule.name}\", \"CweRulePattern\": \"{\\\"detail-type\\\":[\\\"GuardDuty Finding\\\"],\\\"source\\\":[\\\"aws.guardduty\\\"]}\"}"
 }

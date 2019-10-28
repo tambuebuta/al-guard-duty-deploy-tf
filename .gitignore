@@ -1,3 +1,4 @@
 .terraform*
+terraform.tfstate*
 payload.zip
 vars.tfvars.test

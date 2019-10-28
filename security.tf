@@ -1,4 +1,3 @@
-
 //Health Check Lambda Policy
 resource "aws_iam_policy" "health_check_lambda_policy" {
   name = "alertlogic-health-check-lambda-policy"
@@ -6,15 +5,15 @@ resource "aws_iam_policy" "health_check_lambda_policy" {
 
   policy = <<EOF
 {
-"Version": "2012-10-17",
-  "Statement": [ 
+  "Version": "2012-10-17",
+  "Statement": [
   {
     "Effect": "Allow",
     "Action": [
        "events:DescribeRule",
        "events:ListTargetsByRule"
        ],
-    "Resources": "${aws_cloudwatch_event_rule.guard_duty_cloudwatch_event_rule.arn}"
+    "Resource": "${aws_cloudwatch_event_rule.guard_duty_cloudwatch_event_rule.arn}"
    },
   {
     "Effect": "Allow",
@@ -23,7 +22,7 @@ resource "aws_iam_policy" "health_check_lambda_policy" {
        "cloudwatch:Describe*",
        "cloudwatch:List*"
        ],
-    "Resources": "*"
+    "Resource": "*"
    }
   ]
  }
@@ -38,23 +37,19 @@ resource "aws_iam_policy" "encrypt_lambda_policy" {
   policy = <<EOF
 {
   "Version": "2012-10-17",
-  "Statement": [ 
+  "Statement": [
   {
     "Effect": "Allow",
-    "Principal": {
-      "AWS": "arn:aws:iam:AWS::989608343549:root"
-    },
     "Action": "logs:CreateLogGroup",
-    "Resources": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:*"
+    "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:*"
    },
   {
     "Effect": "Allow",
     "Action": [
       "logs:CreateLogStream",
       "logs:PutLogEvents"
-
     ],
-    "Resources": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:log-stream:log-stream:*"
+    "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:log-stream:log-stream:*"
    }
  ]
 }
@@ -69,48 +64,41 @@ resource "aws_iam_policy" "collect_lambda_policy" {
   policy = <<EOF
 {
   "Version": "2012-10-17",
-  "Statement": [ 
+  "Statement": [
   {
     "Effect": "Allow",
-    "Principal": {
-      "AWS": "arn:aws:iam:AWS::${var.aws_account_id}:root"
-    },
     "Action": "logs:CreateLogGroup",
-    "Resources": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:*"
+    "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:*"
    },
   {
     "Effect": "Allow",
     "Action": [
       "logs:CreateLogStream",
       "logs:PutLogEvents"
-
     ],
-    "Resources": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:log-stream:log-stream:*"
+    "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:log-stream:log-stream:*"
    },
   {
     "Effect": "Allow",
     "Action": [
       "lambda:*"
-
     ],
-    "Resources": "${aws_lambda_function.encrypt_lambda_function.arn}"
+    "Resource": "${aws_lambda_function.encrypt_lambda_function.arn}"
    },
   {
     "Effect": "Allow",
     "Action": [
       "KinesisStream:*"
-
     ],
-    "Resources": "${aws_kinesis_stream.al_cwe_collector.arn}"
+    "Resource": "${aws_kinesis_stream.al_cwe_collector.arn}"
    },
   {
     "Effect": "Allow",
     "Action": [
       "S3:Get*"
-
     ],
-    "Resources": "arn:aws:s3:::alertlogic-collectors-us-east-1/*"
-   }   
+    "Resource": "arn:aws:s3:::alertlogic-collectors-us-east-1/*"
+   }
  ]
 }
 EOF
@@ -124,31 +112,31 @@ resource "aws_iam_policy" "cloud_watch_event_policy" {
   policy = <<EOF
 {
   "Version": "2012-10-17",
-  "Statement": [ 
+  "Statement": [
   {
     "Effect": "Allow",
-    "Action": [ 
+    "Action": [
       "kinesis:PutRecord",
       "kinesis:PutRecords",
       "kinesis:GetRecords",
       "kinesis:GetShardIterator",
       "kinesis:DescribeStream"
       ],
-    "Resources": "${aws_kinesis_stream.al_cwe_collector.arn}"
+    "Resource": "${aws_kinesis_stream.al_cwe_collector.arn}"
    },
   {
     "Effect": "Allow",
     "Action": [
       "kinesis:ListStreams"
     ],
-    "Resources": "*"
+    "Resource": "*"
    },
    {
     "Effect": "Allow",
     "Action": [
       "lambda:*"
     ],
-    "Resources": "${aws_lambda_function.collect_lambda_function.arn}"
+    "Resource": "${aws_lambda_function.collect_lambda_function.arn}"
    }
  ]
 }
