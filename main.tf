@@ -23,88 +23,6 @@ resource "aws_kinesis_stream" "al_cwe_collector" {
   }
 }
 
-//Create Basic Lambda Role
-resource "aws_iam_role" "basic_lambda_role" {
-  name = "al_basic_lambda_role_name"
-  path = "/"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow"
-    }
-  ]
-}
-EOF
-}
-
-//Create Collect Lambda IAM Role
-resource "aws_iam_role" "collect_lambda_role" {
-  name = "al_collect_lambda_role_name"
-  path = "/"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow"
-    }
-}
-EOF
-}
-
-//Create Encrypt Lambda Role
-resource "aws_iam_role" "encrypt_lambda_role" {
-  name = "al_encrypt_lambda_role_name"
-  path = "/"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow"
-    }
-  ]
-}
-EOF
-}
-
-//Cloud Watch Event Role
-resource "aws_iam_role" "cloud_watch_event_role" {
-  name = "cloud_watch_event_role_name"
-  path = "/"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "events.amazonaws.com"
-      },
-      "Effect": "Allow"
-    }
-  ]
-}
-EOF
-}
-
 //Create Lambda KMS Key
 resource "aws_kms_key" "al_lambda_kms_key" {
   description = "kms key used to encrypt credentials for lambda"
@@ -119,7 +37,7 @@ resource "aws_kms_key" "al_lambda_kms_key" {
 
 //Create Lambda KMS Key alias
 resource "aws_kms_alias" "al_kms_key_alias" {
-  name          = "alias/guard-duty-key"
+  name          = "alias/guard-duty-key-01"
   target_key_id = "${aws_kms_key.al_lambda_kms_key.key_id}"
 }
 
@@ -142,7 +60,7 @@ resource "aws_lambda_function" "collect_lambda_function" {
       aws_lambda_s3_bucket          = "alertlogic-collectors-us-east-1"
       aws_lambda_zipfile_name       = "packages/lambda/al-cwe-collector.zip"
       aws_lambda_update_config_name = "configs/lambda/al-cwe-collector.json"
-      al_api                        = "api.global-services.global.alertlogic.com"
+      al_api                        = "${var.al_api_endpoint}"
       al_data_residency             = "default"
     }
   }

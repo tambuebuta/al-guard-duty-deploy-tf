@@ -1,3 +1,85 @@
+//Create Basic Lambda Role
+resource "aws_iam_role" "basic_lambda_role" {
+  name = "al_basic_lambda_role_name"
+  path = "/"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+//Create Collect Lambda IAM Role
+resource "aws_iam_role" "collect_lambda_role" {
+  name = "al_collect_lambda_role_name"
+  path = "/"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+}
+EOF
+}
+
+//Create Encrypt Lambda Role
+resource "aws_iam_role" "encrypt_lambda_role" {
+  name = "al_encrypt_lambda_role_name"
+  path = "/"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+//Cloud Watch Event Role
+resource "aws_iam_role" "cloud_watch_event_role" {
+  name = "cloud_watch_event_role_name"
+  path = "/"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "events.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
 //Health Check Lambda Policy
 resource "aws_iam_policy" "health_check_lambda_policy" {
   name = "alertlogic-health-check-lambda-policy"
@@ -143,6 +225,46 @@ resource "aws_iam_policy" "cloud_watch_event_policy" {
 EOF
 }
 
+//KMS Key Policy
+resource "aws_iam_policy" "collect_kms_key_policy" {
+  name = "al-kms-key-policy"
+  path = "/"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": {
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt",
+        "kms:encrypt"
+      ],
+      "Resource": "*"
+    }
+}
+EOF
+}
+
+
+//KMS Key Policy
+resource "aws_iam_policy" "encrypt_kms_key_policy" {
+  name = "al-kms-key-policy"
+  path = "/"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": {
+      "Effect": "Allow",
+      "Action": [
+        "kms:encrypt"
+      ],
+      "Resource": "*"
+    }
+}
+EOF
+}
+
 // Attach Encrypted IAM policy to IAM role
 resource "aws_iam_role_policy_attachment" "encrypt_lambda_policy_attachment" {
   role       = "${aws_iam_role.encrypt_lambda_role.name}"
@@ -165,4 +287,16 @@ resource "aws_iam_role_policy_attachment" "collect_lambda_policy_attachment" {
 resource "aws_iam_role_policy_attachment" "cloud_watch_event_policy_attachment" {
   role       = "${aws_iam_role.cloud_watch_event_role.name}"
   policy_arn = "${aws_iam_policy.cloud_watch_event_policy.arn}"
+}
+
+// Attach Collected IAM policy to IAM role
+resource "aws_iam_role_policy_attachment" "collect_lambda_kms_policy_attachment" {
+  role       = "${aws_iam_role.collect_lambda_role.name}"
+  policy_arn = "${aws_iam_policy.collect_kms_key_policy.arn}"
+}
+
+// Attach Encrypted IAM policy to IAM role
+resource "aws_iam_role_policy_attachment" "encrypt_lambda_kms_policy_attachment" {
+  role       = "${aws_iam_role.encrypt_lambda_role.name}"
+  policy_arn = "${aws_iam_policy.encrypt_kms_key_policy.arn}"
 }

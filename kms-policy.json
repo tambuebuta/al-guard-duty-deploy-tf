@@ -1,39 +1,11 @@
 {
+  "Id": "key-policy-lambda",
   "Version": "2012-10-17",
-  "Statement": [{
+  "Statement": {
       "Sid": "Enable IAM User Permission",
       "Effect": "Allow",
-      "Principal": {
-        "AWS": "arn:aws:iam:AWS::${var.aws_account_id}:root"
-      },
-      "Action": [
-        "kms:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Sid": "Allow use of the key for lambda",
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "${aws_iam_role.collect_lambda_role.arn}"
-      },
-      "Action": [
-        "kms:Decrypt",
-        "kms:encrypt"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Sid": "Allow use of the lambda encryption",
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "${aws_iam_role.encrypt_lambda_role.arn}"
-      },
-      "Action": [
-        "kms:Decrypt",
-        "kms:encrypt"
-      ],
+      "Principal": {"AWS": "arn:aws:iam::989608343549:root"},
+      "Action": "kms:*",
       "Resource": "*"
     }
-  ]
 }
