@@ -21,7 +21,7 @@ EOF
 
 //Create Collect Lambda IAM Role
 resource "aws_iam_role" "collect_lambda_role" {
-  name = "al_collect_lambda_role_name"
+  name = "${var.collect_lambda_role_name}"
   path = "/"
 
   assume_role_policy = <<EOF
@@ -40,7 +40,7 @@ EOF
 
 //Create Encrypt Lambda Role
 resource "aws_iam_role" "encrypt_lambda_role" {
-  name = "al_encrypt_lambda_role_name"
+  name = "${var.encrypt_lambda_role_name}"
   path = "/"
 
   assume_role_policy = <<EOF
@@ -61,7 +61,7 @@ EOF
 
 //Cloud Watch Event Role
 resource "aws_iam_role" "cloud_watch_event_role" {
-  name = "cloud_watch_event_role_name"
+  name = "${var.cw_event_role_name}"
   path = "/"
 
   assume_role_policy = <<EOF
@@ -82,7 +82,7 @@ EOF
 
 //Health Check Lambda Policy
 resource "aws_iam_policy" "health_check_lambda_policy" {
-  name = "alertlogic-health-check-lambda-policy"
+  name = "${var.lambda_health_check_policy}"
   path = "/"
 
   policy = <<EOF
@@ -113,7 +113,7 @@ EOF
 
 //Create Encrypt Lambda Policy - REMEMBER TO ATTACH TO ENCRYPT LAMBA ROLE(Done)
 resource "aws_iam_policy" "encrypt_lambda_policy" {
-  name = "alertlogic-encrypt-lambda-policy"
+  name = "${var.encrypt_lambda_policy}"
   path = "/"
 
   policy = <<EOF
@@ -123,7 +123,7 @@ resource "aws_iam_policy" "encrypt_lambda_policy" {
   {
     "Effect": "Allow",
     "Action": "logs:CreateLogGroup",
-    "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:*"
+    "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:*"
    },
   {
     "Effect": "Allow",
@@ -131,7 +131,7 @@ resource "aws_iam_policy" "encrypt_lambda_policy" {
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ],
-    "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:log-stream:log-stream:*"
+    "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.encrypt_lambda_function.name:log-stream:log-stream:*"
    }
  ]
 }
@@ -140,7 +140,7 @@ EOF
 
 //Create Collect Lambda Policy - REMEMBER TO ATTACH TO COLLECT LAMBA ROLE(Done)
 resource "aws_iam_policy" "collect_lambda_policy" {
-  name = "alertlogic-guardduty-lambda-policy"
+  name = "${var.guard_duty_lambda_policy}"
   path = "/"
 
   policy = <<EOF
@@ -150,7 +150,7 @@ resource "aws_iam_policy" "collect_lambda_policy" {
   {
     "Effect": "Allow",
     "Action": "logs:CreateLogGroup",
-    "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:*"
+    "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:*"
    },
   {
     "Effect": "Allow",
@@ -158,7 +158,7 @@ resource "aws_iam_policy" "collect_lambda_policy" {
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ],
-    "Resource": "arn:aws:logs:us-east-1:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:log-stream:log-stream:*"
+    "Resource": "arn:aws:logs:${var.aws_region}:${var.aws_account_id}::log-group:/aws/lambda/aws_lambda_function.collect_lambda_function.name:log-stream:log-stream:*"
    },
   {
     "Effect": "Allow",
@@ -179,7 +179,7 @@ resource "aws_iam_policy" "collect_lambda_policy" {
     "Action": [
       "S3:Get*"
     ],
-    "Resource": "arn:aws:s3:::alertlogic-collectors-us-east-1/*"
+    "Resource": "arn:aws:s3:::${var.guard_duty_s3_bucket}/*"
    }
  ]
 }
@@ -188,7 +188,7 @@ EOF
 
 //Create Cloud Watch Event Policy - REMEMBER TO ATTACH TO ENCRYPT LAMBA ROLE(Done)
 resource "aws_iam_policy" "cloud_watch_event_policy" {
-  name = "alertlogic-cloudwatch-event-policy"
+  name = "${var.cloud_watch_event_policy}"
   path = "/"
 
   policy = <<EOF
@@ -227,7 +227,7 @@ EOF
 
 //KMS Key Policy
 resource "aws_iam_policy" "collect_kms_key_policy" {
-  name = "al-kms-key-policy"
+  name = "${var.kms_key_policy}"
   path = "/"
 
   policy = <<EOF
@@ -246,9 +246,9 @@ EOF
 }
 
 
-//KMS Key Policy
+//Encrypt KMS Key Policy
 resource "aws_iam_policy" "encrypt_kms_key_policy" {
-  name = "al-kms-key-policy"
+  name = "${var.encrypt_kms_policy}"
   path = "/"
 
   policy = <<EOF
