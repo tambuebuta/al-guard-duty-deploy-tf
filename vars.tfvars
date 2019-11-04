@@ -22,4 +22,5 @@ guard_duty_lambda_policy = "al-guardduty-lambda-policy"
 cloud_watch_event_policy = "al-cloudwatch-event-policy"
 kms_key_policy = "al-kms-key-policy"
 encrypt_kms_policy  = "encrypt-kms-key-policy"
-
+basic_lambda_role = "gd-basic-lambda-role"
+collect_fxn_name = "al-collector"

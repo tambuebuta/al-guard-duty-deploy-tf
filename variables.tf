@@ -29,6 +29,8 @@ variable "checkin_scheduled_event" {}
 
 variable "cloud_watch_event_rule_name" {}
 
+variable "basic_lambda_role" {}
+
 variable "collect_lambda_role_name" {}
 
 variable "encrypt_lambda_role_name" {}
@@ -46,3 +48,5 @@ variable "cloud_watch_event_policy" {}
 variable "kms_key_policy" {}
 
 variable "encrypt_kms_policy" {}
+
+variable "collect_fxn_name"{}

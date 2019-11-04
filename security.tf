@@ -1,6 +1,6 @@
 //Create Basic Lambda Role
 resource "aws_iam_role" "basic_lambda_role" {
-  name = "al_basic_lambda_role_name"
+  name = "${var.basic_lambda_role}"
   path = "/"
 
   assume_role_policy = <<EOF

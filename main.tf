@@ -43,7 +43,7 @@ resource "aws_kms_alias" "al_kms_key_alias" {
 
 //Collect Lambda Function - Alert Logic Lambda Guard Duty event collector
 resource "aws_lambda_function" "collect_lambda_function" {
-  function_name = "al-cwe-collector"
+  function_name = "${var.collect_fxn_name}"
   role          = "${aws_iam_role.collect_lambda_role.arn}"
   kms_key_arn   = "${aws_kms_key.al_lambda_kms_key.arn}"
   s3_bucket     = "${var.guard_duty_s3_bucket}"
